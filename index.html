@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Basketball Bounceback - Game Jam Edition</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>🏀 BASKETBALL BOUNCEBACK</h1>
+    <div class="subtitle">BOUNCE & AVOID OBSTACLES • SUPER JUMP • BUZZER BEATER SHOT!</div>
+  </header>
+
+  <div class="game-wrapper">
+    <canvas id="gameCanvas" width="800" height="450"></canvas>
+  </div>
+
+  <div class="control-bar">
+    <div class="btn-group">
+      <button id="muteBtn" onclick="toggleMute()">🔊 SOUND: ON</button>
+      <button id="restartBtn" onclick="restartLevel()">🔄 RESTART</button>
+    </div>
+
+    <div class="btn-group">
+      <label for="skinSelect" style="font-size:0.85rem; font-weight:bold; color:#ffd166;">BALL SKIN:</label>
+      <select id="skinSelect" onchange="changeSkin(this.value)">
+        <option value="0">Classic Basketball 🏀</option>
+        <option value="1">Neon Volt Ball 🎾</option>
+        <option value="2">Pro Soccer Ball ⚽</option>
+        <option value="3">Lucky 8-Ball 🎱</option>
+        <option value="4">Retro Beach Ball 🏐</option>
+        <option value="5">Championship Baseball ⚾</option>
+      </select>
+    </div>
+
+    <div class="btn-group">
+      <label for="levelSelect" style="font-size:0.85rem; font-weight:bold; color:#ffd166;">LEVEL:</label>
+      <select id="levelSelect" onchange="changeLevel(this.value)">
+        <option value="0">Level 1: Street Court Warmup</option>
+        <option value="1">Level 2: Rooftop Jam</option>
+        <option value="2">Level 3: Championship Arena</option>
+      </select>
+      <button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
+    </div>
+  </div>
+
+  <!-- On-Screen Touch Controls for Mobile / Tablets -->
+  <div class="touch-controls">
+    <div class="btn-group">
+      <button class="touch-btn" id="btnLeft">◀</button>
+      <button class="touch-btn" id="btnRight">▶</button>
+    </div>
+    <div class="btn-group">
+      <button class="touch-btn" id="btnSlam" style="border-color:#ff4d6d; color:#ff4d6d;">▼</button>
+      <button class="touch-btn" id="btnJump" style="border-color:#06d6a0; color:#06d6a0;">▲</button>
+    </div>
+  </div>
+
+  <div class="instructions-card">
+    <h3>📖 HOW TO PLAY</h3>
+    <div class="instructions-grid">
+      <div class="instruction-item">
+        <b>🏀 Natural Bounce & Dribble:</b> The basketball bounces rhythmically as you roll. Time your hops to build speed and rhythm!
+      </div>
+      <div class="instruction-item">
+        <b>🚀 Super Leap / High Jump:</b> Press <b>[SPACE]</b>, <b>[W]</b>, or <b>[UP]</b> when landing to boost your bounce sky-high over tall spike hurdles!
+      </div>
+      <div class="instruction-item">
+        <b>💥 Ground Slam:</b> Press <b>[S]</b> or <b>[DOWN]</b> while in midair to slam down at top speed! Rebounds with a shockwave that crushes nearby defenders!
+      </div>
+      <div class="instruction-item">
+        <b>⚡ Trampolines & Springs:</b> Hit the yellow spring pads to catapult yourself across massive chasms and spiked ceilings!
+      </div>
+      <div class="instruction-item">
+        <b>👾 Stomp Defenders:</b> Land on top of patrolling walkers or bat defenders from above to stomp them for <b>+200 PTS</b>!
+      </div>
+      <div class="instruction-item">
+        <b>🎯 THE FINAL SHOT:</b> Reach the Buzzer Beater Zone at the court's end. Drag & release or hold <b>[SPACE]</b> to aim and sink the game-winning shot into the hoop!
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Scripts -->
+  <script src="js/assets.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/physics.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+
+  <script>
+    function toggleMute() {
+      const isMuted = Audio.toggleMute();
+      document.getElementById('muteBtn').innerText = isMuted ? '🔇 SOUND: OFF' : '🔊 SOUND: ON';
+    }
+
+    function restartLevel() {
+      if (window.GameInstance) {
+        window.GameInstance.initLevel(window.GameInstance.levelIndex);
+      }
+    }
+
+    function changeSkin(val) {
+      if (window.GameInstance) {
+        window.GameInstance.selectedSkin = parseInt(val, 10);
+        if (window.GameInstance.ball) {
+          window.GameInstance.ball.selectedSkin = parseInt(val, 10);
+        }
+      }
+    }
+
+    function changeLevel(val) {
+      if (window.GameInstance) {
+        window.GameInstance.initLevel(parseInt(val, 10));
+      }
+    }
+
+    function toggleFullscreen() {
+      const elem = document.querySelector('.game-wrapper');
+      if (!document.fullscreenElement) {
+        if (elem.requestFullscreen) elem.requestFullscreen();
+        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Touch Pad Button Bindings
+    const bindTouch = (id, keyName) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        Audio.init();
+        if (window.GameInstance) {
+          window.GameInstance.input[keyName] = true;
+          if (keyName === 'jump') {
+            window.GameInstance.input.jumpPressed = true;
+            if (window.GameInstance.state === STATES.MENU) window.GameInstance.initLevel(0);
+            else if (window.GameInstance.state === STATES.GAMEOVER) window.GameInstance.initLevel(window.GameInstance.levelIndex);
+            else if (window.GameInstance.state === STATES.VICTORY) window.GameInstance.initLevel(window.GameInstance.levelIndex + 1);
+          }
+        }
+      }, { passive: false });
+
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        if (window.GameInstance) window.GameInstance.input[keyName] = false;
+      }, { passive: false });
+    };
+
+    bindTouch('btnLeft', 'left');
+    bindTouch('btnRight', 'right');
+    bindTouch('btnJump', 'jump');
+    bindTouch('btnSlam', 'down');
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Archive files
+*.zip
+
+# Godot 4 
+.godot/
+*.translation

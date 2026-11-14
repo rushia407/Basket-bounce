@@ -1,0 +1,185 @@
+﻿* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background: radial-gradient(circle at center, #1e152a 0%, #0c0914 100%);
+  color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ff9e00, #ff0054, #7209b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 18px rgba(255, 110, 0, 0.4);
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #ffd166;
+  margin-top: 2px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.game-wrapper {
+  position: relative;
+  width: 800px;
+  max-width: 98vw;
+  border: 4px solid #f77f00;
+  border-radius: 12px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(247, 127, 0, 0.35);
+  background-color: #000;
+  overflow: hidden;
+}
+
+canvas#gameCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: crosshair;
+}
+
+/* Control Bar */
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 800px;
+  max-width: 98vw;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: rgba(30, 24, 48, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+button, select {
+  background: #2b2042;
+  color: #fff;
+  border: 1px solid #f77f00;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover, select:hover {
+  background: #f77f00;
+  color: #000;
+  box-shadow: 0 0 10px rgba(247, 127, 0, 0.6);
+}
+
+select {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* Touch Controls for Mobile */
+.touch-controls {
+  display: none;
+  width: 800px;
+  max-width: 98vw;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+@media (pointer: coarse) {
+  .touch-controls {
+    display: flex;
+  }
+}
+
+.touch-btn {
+  background: rgba(247, 127, 0, 0.3);
+  border: 2px solid #f77f00;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.touch-btn:active {
+  background: #f77f00;
+  color: #000;
+  transform: scale(0.94);
+}
+
+/* Instructions card */
+.instructions-card {
+  width: 800px;
+  max-width: 98vw;
+  margin-top: 14px;
+  background: rgba(20, 16, 32, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+.instructions-card h3 {
+  color: #fca311;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.instructions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.instruction-item {
+  background: rgba(43, 32, 66, 0.4);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #f77f00;
+}
+
+.instruction-item b {
+  color: #ffd166;
+}

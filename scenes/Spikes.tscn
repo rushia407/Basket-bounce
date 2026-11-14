@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://spk7basket01"]
+
+[ext_resource type="Script" path="res://scripts/Spikes.gd" id="1_spikes"]
+[ext_resource type="Texture2D" path="res://kenney_pixel-platformer/Tilemap/tilemap_packed.png" id="2_texture"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spikes"]
+size = Vector2(32, 14)
+
+[node name="Spikes" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_spikes")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_texture")
+region_enabled = true
+region_rect = Rect2(144, 54, 18, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_spikes")
