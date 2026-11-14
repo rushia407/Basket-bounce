@@ -22,21 +22,16 @@ var squish: Vector2 = Vector2.ONE
 
 var is_slamming: bool = false
 var has_double_jumped: bool = false
-var is_alive: bool = true
+var is_alive: bool = false # Starts inactive until activated by Game
 
-# Shooting Mode
-var in_shooting_zone: bool = false
-var is_shooting: bool = false
-var shot_complete: bool = false
-
-# Skins
+# Skins with costs (claimable by coins)
 const SKINS = [
-	{"name": "Classic Basketball", "rect": Rect2(48, 12, 33, 33)},
-	{"name": "Neon Volt Ball", "rect": Rect2(8, 11, 32, 32)},
-	{"name": "Pro Soccer Ball", "rect": Rect2(88, 12, 32, 32)},
-	{"name": "Lucky 8-Ball", "rect": Rect2(5, 55, 32, 32)},
-	{"name": "Retro Beach Ball", "rect": Rect2(47, 55, 32, 32)},
-	{"name": "Championship Baseball", "rect": Rect2(87, 55, 34, 34)}
+	{"id": 0, "name": "Classic Basketball", "rect": Rect2(48, 12, 33, 33), "cost": 0},
+	{"id": 1, "name": "Neon Volt Ball",     "rect": Rect2(8, 11, 32, 32),  "cost": 3},
+	{"id": 2, "name": "Pro Football",       "rect": Rect2(88, 12, 32, 32), "cost": 6},
+	{"id": 3, "name": "Lucky 8-Ball",       "rect": Rect2(5, 55, 32, 32),  "cost": 9},
+	{"id": 4, "name": "Retro Beach Ball",   "rect": Rect2(47, 55, 32, 32), "cost": 12},
+	{"id": 5, "name": "Championship Ball",  "rect": Rect2(87, 55, 34, 34), "cost": 15}
 ]
 var selected_skin: int = 0
 
@@ -46,7 +41,29 @@ var trail: Array[Dictionary] = []
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 func _ready() -> void:
+	# Disabled by default so it doesn't fall or lose before game starts
+	set_physics_process(false)
+	visible = false
 	apply_skin(selected_skin)
+
+func activate(spawn_pos: Vector2) -> void:
+	global_position = spawn_pos
+	velocity = Vector2.ZERO
+	is_alive = true
+	is_slamming = false
+	has_double_jumped = false
+	ball_rotation = 0.0
+	squish = Vector2.ONE
+	trail.clear()
+	visible = true
+	set_physics_process(true)
+	apply_skin(selected_skin)
+
+func deactivate() -> void:
+	is_alive = false
+	velocity = Vector2.ZERO
+	visible = false
+	set_physics_process(false)
 
 func apply_skin(skin_idx: int) -> void:
 	selected_skin = clampi(skin_idx, 0, SKINS.size() - 1)
@@ -103,16 +120,14 @@ func _physics_process(delta: float) -> void:
 	ball_rotation += (velocity.x * 0.02 + (15.0 if is_slamming else 0.0)) * delta
 
 	# Perform move_and_slide
-	var was_on_floor = is_on_floor()
 	move_and_slide()
 
-	# Wall rebound bounce
+	# Wall rebound bounce (silent - repetitive bounce SFX removed per user request)
 	if is_on_wall():
 		velocity.x = -get_wall_normal().x * absf(velocity.x) * 0.6
-		SoundManager.play("bounce", 0.6)
 		squish = Vector2(0.75, 1.25)
 
-	# Floor impact & continuous rhythmic bounce
+	# Floor impact & continuous rhythmic bounce (silent - bounce SFX removed per user request)
 	if is_on_floor():
 		has_double_jumped = false
 		if is_slamming:
@@ -120,7 +135,6 @@ func _physics_process(delta: float) -> void:
 			velocity.y = SLAM_REBOUND
 			squish = Vector2(1.5, 0.55)
 			SoundManager.play("slam", 1.5)
-			# Shockwave defeat enemies nearby
 			_shockwave_impact()
 		else:
 			if input_jump or jump_just_pressed:
@@ -129,7 +143,6 @@ func _physics_process(delta: float) -> void:
 				squish = Vector2(0.75, 1.35)
 			else:
 				velocity.y = BASE_BOUNCE
-				SoundManager.play("bounce", 0.9)
 				squish = Vector2(1.3, 0.7)
 
 	_update_squish(delta)
@@ -143,7 +156,7 @@ func _update_squish(delta: float) -> void:
 		sprite.rotation = ball_rotation
 
 func _update_trail() -> void:
-	if absf(velocity.x) > 180.0 or absf(velocity.y) > 550.0 or is_slamming or is_shooting:
+	if absf(velocity.x) > 180.0 or absf(velocity.y) > 550.0 or is_slamming:
 		trail.append({"pos": global_position, "rot": ball_rotation, "alpha": 0.55})
 		if trail.size() > 6:
 			trail.pop_front()
@@ -174,13 +187,13 @@ func pop_ball(reason: String = "Popped") -> void:
 	if not is_alive:
 		return
 	is_alive = false
+	set_physics_process(false)
 	velocity = Vector2.ZERO
 	SoundManager.play("hit", 1.2)
 	visible = false
 	ball_popped.emit(reason)
 
 func _shockwave_impact() -> void:
-	# Find enemies in 100px radius
 	var tree = get_tree()
 	if not tree:
 		return

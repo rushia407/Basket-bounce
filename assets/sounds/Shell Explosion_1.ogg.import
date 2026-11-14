@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cg3233howecb5"
+path="res://.godot/imported/Shell Explosion_1.ogg-8d2c718ece7b1877711989396b09a29e.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/Shell Explosion_1.ogg"
+dest_files=["res://.godot/imported/Shell Explosion_1.ogg-8d2c718ece7b1877711989396b09a29e.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

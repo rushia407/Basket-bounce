@@ -10,9 +10,9 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	if is_ceiling:
 		if sprite:
-			sprite.region_rect = Rect2(162, 54, 18, 18)
+			sprite.flip_v = true
 		if col_shape:
-			col_shape.position.y = -5
+			col_shape.position.y = -6
 
 func _on_body_entered(body: Node2D) -> void:
 	var ball = body as Ball

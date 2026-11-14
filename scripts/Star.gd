@@ -34,9 +34,13 @@ func _on_body_entered(body: Node2D) -> void:
 	if ball and ball.is_alive:
 		collected = true
 		SoundManager.play("star", 1.2)
-		star_collected.emit(250)
+		star_collected.emit(100)
 		
+		# Vertical jump pop animation when collected!
 		var tween = create_tween()
-		tween.tween_property(self, "scale", Vector2(1.8, 1.8), 0.15)
-		tween.parallel().tween_property(self, "modulate:a", 0.0, 0.15)
-		tween.tween_callback(queue_free)
+		tween.set_parallel(true)
+		# Jump vertically up 52 pixels with springy ease-out
+		tween.tween_property(self, "position:y", position.y - 52.0, 0.32).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "scale", Vector2(1.8, 1.8), 0.32)
+		tween.tween_property(self, "modulate:a", 0.0, 0.32)
+		tween.chain().tween_callback(queue_free)

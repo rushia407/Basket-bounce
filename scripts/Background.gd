@@ -1,40 +1,58 @@
 extends Node2D
 
-@export var theme: String = "street"
+@export var theme: String = "street":
+	set(val):
+		if theme != val:
+			theme = val
+			_load_theme_layers()
 
-var stars: Array[Dictionary] = []
-var buildings: Array[Dictionary] = []
-var _rng_built: bool = false
+var layers: Array[Texture2D] = []
+var font: Font = null
+
+# Cool 2D background banner signs per theme (world_x, world_y, text, color, subtext)
+const LEVEL_BANNERS = {
+	"street": [
+		{"x": 160.0, "y": 140.0, "text": "STREET HOOP ZONE", "color": Color("#ffbe0b"), "sub": "COURT #1 // BOUNCE BACK"},
+		{"x": 640.0, "y": 120.0, "text": "DUNK OR DIE", "color": Color("#ff006e"), "sub": "NO RETREAT // DEFEND THE RIM"},
+		{"x": 1140.0, "y": 150.0, "text": "CLUTCH SHOT >>>", "color": Color("#00f5d4"), "sub": "SWISH TO WIN"}
+	],
+	"rooftop": [
+		{"x": 180.0, "y": 130.0, "text": "ROOFTOP JAM", "color": Color("#00f5d4"), "sub": "ALTITUDE 400M // ELEVATE"},
+		{"x": 720.0, "y": 110.0, "text": "SKY HIGH HOOPS", "color": Color("#fee440"), "sub": "LOOK OUT BELOW"},
+		{"x": 1220.0, "y": 140.0, "text": "AERODUNK ARENA", "color": Color("#f72585"), "sub": "TOUCH THE CLOUDS"}
+	],
+	"arena": [
+		{"x": 200.0, "y": 120.0, "text": "CHAMPIONSHIP FINALS", "color": Color("#4cc9f0"), "sub": "ROUND 3 // LEGENDS ONLY"},
+		{"x": 780.0, "y": 110.0, "text": "CLUTCH MOMENT", "color": Color("#ffbe0b"), "sub": "EVERY BOUNCE COUNTS"},
+		{"x": 1320.0, "y": 130.0, "text": "BUZZER BEATER!", "color": Color("#ff0054"), "sub": "MAKE HISTORY"}
+	]
+}
 
 func _ready() -> void:
 	z_index = -100
-	top_level = true  # Ignore parent transform — stays at world origin
+	top_level = true
+	font = load("res://assets/fonts/PixelOperator8-Bold.ttf")
+	_load_theme_layers()
 
-func _build_once() -> void:
-	if _rng_built:
-		return
-	_rng_built = true
-	for i in range(60):
-		stars.append({
-			"x": randf_range(0.0, 1280.0),
-			"y": randf_range(5.0, 280.0),
-			"size": randf_range(1.5, 3.5),
-			"sparkle": randf() * TAU,
-			"speed": randf_range(2.0, 5.5)
-		})
-	for i in range(28):
-		buildings.append({
-			"w": randf_range(48.0, 100.0),
-			"h": randf_range(100.0, 240.0),
-			"has_light": (i % 2 == 0),
-			"light_chance": randf()
-		})
+func _load_theme_layers() -> void:
+	layers.clear()
+	var folder = "city1"
+	if theme == "rooftop":
+		folder = "city3"
+	elif theme == "arena":
+		folder = "city7"
 
-func _process(delta: float) -> void:
-	_build_once()
-	for st in stars:
-		st["sparkle"] += delta * st["speed"]
-	# Anchor this node to the camera's top-left corner every frame
+	var base_path = "res://assets/backgrounds/%s/" % folder
+	# Load numbered layers in order: 1.png, 2.png, 3.png...
+	for i in range(1, 9):
+		var path = base_path + "%d.png" % i
+		if ResourceLoader.exists(path):
+			var tex = load(path) as Texture2D
+			if tex:
+				layers.append(tex)
+	queue_redraw()
+
+func _process(_delta: float) -> void:
 	var cam := get_viewport().get_camera_2d()
 	if cam:
 		var vp_half := get_viewport_rect().size * 0.5
@@ -42,93 +60,95 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	var W := get_viewport_rect().size.x
-	var H := get_viewport_rect().size.y
+	var vp_size := get_viewport_rect().size
+	var W := vp_size.x
+	var H := vp_size.y
 
-	# ----- Sky: draw horizontal bands (no per-vertex colors needed) -----
-	var sky_top: Color
-	var sky_mid: Color
-	var sky_bot: Color
-	match theme:
-		"rooftop":
-			sky_top = Color("#0d1b2a")
-			sky_mid = Color("#1e3a5f")
-			sky_bot = Color("#2a4a6e")
-		"arena":
-			sky_top = Color("#0d0020")
-			sky_mid = Color("#240046")
-			sky_bot = Color("#4a0080")
-		_: # street / sunset
-			sky_top = Color("#1a0a2e")
-			sky_mid = Color("#6a0572")
-			sky_bot = Color("#c8440a")
+	var cam := get_viewport().get_camera_2d()
+	var cam_world_x: float = cam.global_position.x if cam else 0.0
 
-	# Draw 8 horizontal bands to fake a gradient
-	var all_colors := [sky_top, sky_top, sky_mid, sky_mid, sky_mid, sky_bot, sky_bot, sky_bot]
-	var band_h := H / float(all_colors.size())
-	for i in range(all_colors.size()):
-		draw_rect(Rect2(0.0, i * band_h, W, band_h + 1.0), all_colors[i])
+	# 1. Draw parallax city layers
+	if layers.size() > 0:
+		var tex_h: float = layers[0].get_height()
+		var tex_w: float = layers[0].get_width()
+		var scale_y: float = H / maxf(tex_h, 1.0)
+		var layer_w: float = tex_w * scale_y
 
-	# ----- Twinkling Stars -----
-	for st in stars:
-		var alpha := clampf(0.2 + sin(st["sparkle"]) * 0.55, 0.0, 1.0)
-		draw_rect(Rect2(st["x"], st["y"], st["size"], st["size"]), Color(1.0, 1.0, 1.0, alpha))
+		for i in range(layers.size()):
+			var tex = layers[i]
+			# Parallax factor: layer 0 is sky (0.0), higher layers scroll slightly faster
+			var factor: float = 0.0 if i == 0 else (0.04 + float(i - 1) * 0.07)
+			var offset: float = fmod(cam_world_x * factor, layer_w)
+			if offset < 0.0:
+				offset += layer_w
 
-	# ----- City Skyline with Parallax (0.15× camera speed) -----
-	var cam_world_x := global_position.x + W * 0.5  # world x of screen center
-	var parallax_x := cam_world_x * 0.15
+			var start_x: float = -offset
+			while start_x < W:
+				draw_texture_rect(
+					tex,
+					Rect2(start_x, 0.0, layer_w, H),
+					false
+				)
+				start_x += layer_w
+	else:
+		# Fallback procedural gradient if no layers loaded
+		var c1 = Color("#1a0a2e")
+		var c2 = Color("#c8440a")
+		draw_rect(Rect2(0, 0, W, H * 0.5), c1)
+		draw_rect(Rect2(0, H * 0.5, W, H * 0.5), c2)
 
-	var b_col := Color("#1d1135") if theme == "arena" else Color("#14142b")
-	var b_col2 := Color("#2a1a4a") if theme == "arena" else Color("#1e1e3f")
+	# 2. Draw 2D Background Neon / Arcade Billboards with Cool Text
+	var banners = LEVEL_BANNERS.get(theme, LEVEL_BANNERS["street"])
+	for b in banners:
+		# Signs are world-anchored with 0.8x parallax for a natural depth feel behind platforms
+		var sign_world_x: float = b["x"]
+		var sign_world_y: float = b["y"]
+		var screen_x: float = (sign_world_x - cam_world_x * 0.85) + (W * 0.5 * 0.85)
+		var screen_y: float = sign_world_y
 
-	# Total width of one full building strip for seamless tiling
-	var total_width := 0.0
-	for b in buildings:
-		total_width += b["w"] + 12.0
-	if total_width <= 0:
-		return
+		if screen_x > -260.0 and screen_x < W + 100.0:
+			_draw_billboard(Vector2(screen_x, screen_y), b["text"], b["sub"], b["color"])
 
-	var offset := fmod(parallax_x, total_width)
-	var cur_x := -offset - 60.0
+	# 3. Ambient court ground atmosphere glow
+	var glow_c = Color(1.0, 0.6, 0.1, 0.08) if theme == "street" else Color(0.2, 0.8, 1.0, 0.08)
+	draw_rect(Rect2(0.0, H * 0.72, W, H * 0.28), glow_c)
 
-	# Draw buildings twice to cover screen on both sides of wrap
-	for _pass in range(2):
-		var px := cur_x
-		for b in buildings:
-			var bw: float = b["w"]
-			var bh: float = b["h"]
-			var bx: float = px
-			var by: float = H - bh
+func _draw_billboard(pos: Vector2, title: String, subtitle: String, accent_color: Color) -> void:
+	var box_w = 260.0
+	var box_h = 48.0
+	var rect = Rect2(pos.x, pos.y, box_w, box_h)
 
-			if bx + bw > -10.0 and bx < W + 10.0:
-				# Building body
-				draw_rect(Rect2(bx, by, bw, bh), b_col)
-				draw_rect(Rect2(bx, by, 4.0, bh), b_col2)
+	# Dark semi-transparent billboard backing
+	draw_rect(rect, Color(0.05, 0.05, 0.1, 0.82))
+	# Glowing outer border
+	draw_rect(rect, accent_color, false, 2.0)
+	# Corner highlights
+	draw_rect(Rect2(pos.x - 2, pos.y - 2, 6, 6), Color.WHITE)
+	draw_rect(Rect2(pos.x + box_w - 4, pos.y - 2, 6, 6), Color.WHITE)
+	draw_rect(Rect2(pos.x - 2, pos.y + box_h - 4, 6, 6), Color.WHITE)
+	draw_rect(Rect2(pos.x + box_w - 4, pos.y + box_h - 4, 6, 6), Color.WHITE)
 
-				# Windows
-				var wy_start := int(by + 14.0)
-				var wy_end   := int(H - 30.0)
-				var wx_start := int(bx + 7.0)
-				var wx_end   := int(bx + bw - 8.0)
-				for wy in range(wy_start, wy_end, 16):
-					for wx in range(wx_start, wx_end, 12):
-						if (wx + wy) % 3 != 0:
-							var win_c: Color
-							if b["has_light"] and b["light_chance"] > 0.3:
-								win_c = Color(1.0, 0.95, 0.4, 0.5)
-							else:
-								win_c = Color(0.3, 0.6, 1.0, 0.25)
-							draw_rect(Rect2(wx, wy, 4.0, 6.0), win_c)
+	# Top header line
+	draw_line(Vector2(pos.x + 8, pos.y + 28), Vector2(pos.x + box_w - 8, pos.y + 28), Color(accent_color.r, accent_color.g, accent_color.b, 0.4), 1.0)
 
-				# Antenna on taller buildings
-				if bw > 60.0:
-					draw_rect(Rect2(bx + bw * 0.5 - 1.0, by - 14.0, 2.0, 14.0), b_col2)
-
-			px += bw + 12.0
-
-		# Offset second pass by total strip width for seamless wrap
-		cur_x += total_width
-
-	# ----- Ground atmosphere glow -----
-	var glow_col := Color(1.0, 0.55, 0.0, 0.07) if theme == "street" else Color(0.4, 0.0, 1.0, 0.06)
-	draw_rect(Rect2(0.0, H * 0.78, W, H * 0.22), glow_col)
+	if font:
+		# Main title
+		draw_string(
+			font,
+			Vector2(pos.x + 12, pos.y + 20),
+			title,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			box_w - 24,
+			10,
+			accent_color
+		)
+		# Subtitle
+		draw_string(
+			font,
+			Vector2(pos.x + 12, pos.y + 40),
+			subtitle,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			box_w - 24,
+			7,
+			Color(0.85, 0.9, 1.0, 0.75)
+		)

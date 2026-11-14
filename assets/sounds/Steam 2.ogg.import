@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bm31nsnicevmw"
+path="res://.godot/imported/Steam 2.ogg-f5b032e94e307f04e9ada02da0876970.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/Steam 2.ogg"
+dest_files=["res://.godot/imported/Steam 2.ogg-f5b032e94e307f04e9ada02da0876970.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
