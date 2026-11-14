@@ -282,18 +282,19 @@ func _update_skin_buttons() -> void:
 				btn.modulate = Color(1.0, 0.9, 0.25)
 			else:
 				btn.text = "%s\n[SELECT]" % s_name
-				btn.modulate = Color(0.9, 0.92, 1.0)
+				btn.modulate = Color(0.9, 0.95, 1.0)
 		else:
-			btn.text = "%s\n[CLAIM %d🪙]" % [s_name, cost]
 			if total_coins >= cost:
-				btn.modulate = Color(0.4, 1.0, 0.55) # Can afford
+				btn.text = "%s\nCLAIM: %d COINS" % [s_name, cost]
+				btn.modulate = Color(0.35, 1.0, 0.55) # Can afford (bright green)
 			else:
-				btn.modulate = Color(0.65, 0.65, 0.7) # Can't afford
+				btn.text = "%s\nNEED: %d COINS" % [s_name, cost]
+				btn.modulate = Color(0.7, 0.72, 0.78) # Can't afford yet (muted)
 
 	# Update subtitle with banked coins info
 	var sub = $HUD/MenuScreen/Panel/Subtitle as Label
 	if sub:
-		sub.text = "🪙 COIN BANK: %d  |  CLAIM & SELECT YOUR BALL" % total_coins
+		sub.text = "COIN BANK: %d COINS  |  CLAIM & SELECT YOUR BALL" % total_coins
 
 func _on_skin_selected(skin_idx: int) -> void:
 	if skin_idx >= Ball.SKINS.size():

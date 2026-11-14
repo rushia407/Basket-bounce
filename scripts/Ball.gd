@@ -26,12 +26,12 @@ var is_alive: bool = false # Starts inactive until activated by Game
 
 # Skins with costs (claimable by coins)
 const SKINS = [
-	{"id": 0, "name": "Classic Basketball", "rect": Rect2(48, 12, 33, 33), "cost": 0},
-	{"id": 1, "name": "Neon Volt Ball",     "rect": Rect2(8, 11, 32, 32),  "cost": 3},
-	{"id": 2, "name": "Pro Football",       "rect": Rect2(88, 12, 32, 32), "cost": 6},
-	{"id": 3, "name": "Lucky 8-Ball",       "rect": Rect2(5, 55, 32, 32),  "cost": 9},
-	{"id": 4, "name": "Retro Beach Ball",   "rect": Rect2(47, 55, 32, 32), "cost": 12},
-	{"id": 5, "name": "Championship Ball",  "rect": Rect2(87, 55, 34, 34), "cost": 15}
+	{"id": 0, "name": "Basketball",  "rect": Rect2(48, 12, 33, 33), "cost": 0},
+	{"id": 1, "name": "Volt Ball",   "rect": Rect2(8, 11, 32, 32),  "cost": 3},
+	{"id": 2, "name": "Football",    "rect": Rect2(88, 12, 32, 32), "cost": 6},
+	{"id": 3, "name": "8-Ball",      "rect": Rect2(5, 55, 32, 32),  "cost": 9},
+	{"id": 4, "name": "Beach Ball",  "rect": Rect2(47, 55, 32, 32), "cost": 12},
+	{"id": 5, "name": "Champion",    "rect": Rect2(87, 55, 34, 34), "cost": 15}
 ]
 var selected_skin: int = 0
 
