@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dg123space456load"]
+[gd_scene format=3 uid="uid://brlya5ddp5hdb"]
 
 [ext_resource type="Script" path="res://scripts/LoadingScreen.gd" id="1_loader"]
 

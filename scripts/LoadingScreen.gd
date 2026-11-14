@@ -33,16 +33,16 @@ var bar_x: float = 0.0
 var bar_y: float = 0.0
 
 # Parallax Starfield Layers
-class Star:
+class SpaceStar:
 	var x: float
 	var y: float
 	var color: Color
 	var phase: float
 	var speed: float
 
-var far_stars: Array[Star] = []
-var mid_stars: Array[Star] = []
-var near_stars: Array[Star] = []
+var far_stars: Array[SpaceStar] = []
+var mid_stars: Array[SpaceStar] = []
+var near_stars: Array[SpaceStar] = []
 
 func _ready() -> void:
 	# Load font
@@ -76,7 +76,7 @@ func _init_stars() -> void:
 
 	# 70 far stars
 	for i in range(70):
-		var s = Star.new()
+		var s = SpaceStar.new()
 		s.x = randf_range(0, 800)
 		s.y = randf_range(0, 450)
 		s.color = far_cols[randi() % far_cols.size()]
@@ -86,7 +86,7 @@ func _init_stars() -> void:
 
 	# 36 mid stars
 	for i in range(36):
-		var s = Star.new()
+		var s = SpaceStar.new()
 		s.x = randf_range(0, 800)
 		s.y = randf_range(0, 450)
 		s.color = mid_cols[randi() % mid_cols.size()]
@@ -96,7 +96,7 @@ func _init_stars() -> void:
 
 	# 16 near stars
 	for i in range(16):
-		var s = Star.new()
+		var s = SpaceStar.new()
 		s.x = randf_range(0, 800)
 		s.y = randf_range(0, 450)
 		s.color = near_cols[randi() % near_cols.size()]
@@ -240,7 +240,7 @@ func _draw() -> void:
 	if balls_tex:
 		_draw_bouncing_balls()
 
-func _draw_stars_list(stars: Array[Star], can_sparkle: bool) -> void:
+func _draw_stars_list(stars: Array[SpaceStar], can_sparkle: bool) -> void:
 	for s in stars:
 		var tw = sin(t * 1.6 + s.phase)
 		if tw < -0.8:
