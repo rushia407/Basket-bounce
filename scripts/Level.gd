@@ -49,10 +49,10 @@ const LEVELS_DATA = [
 			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
 		]
 	},
-	# LEVEL 2: Rooftop Jam (City 5 Sunset/Twilight)
+	# LEVEL 2: Cosmic Space Jam (Space bgs Background)
 	{
-		"name": "Level 2: Rooftop Jam",
-		"theme": "rooftop",
+		"name": "Level 2: Cosmic Space Jam",
+		"theme": "space",
 		"map": [
 			[6,6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -73,10 +73,10 @@ const LEVELS_DATA = [
 			{"x": 27 * 36, "y": 9 * 36, "rangeX": 0.0, "rangeY": 40.0, "speed": 1.5, "width": 2}
 		]
 	},
-	# LEVEL 3: Orbital Space Finals (Space Nebula & Planets Background!)
+	# LEVEL 3: Cyber Championship Arena (City 7 Neon Cyber Arena Background)
 	{
-		"name": "Level 3: Orbital Space Jam",
-		"theme": "space",
+		"name": "Level 3: Cyber Championship Arena",
+		"theme": "arena",
 		"map": [
 			[6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],

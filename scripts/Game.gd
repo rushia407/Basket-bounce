@@ -24,6 +24,9 @@ var screen_shake: float = 0.0
 @onready var hud: CanvasLayer = $HUD
 
 # HUD Nodes
+@onready var top_bar: ColorRect = $HUD/GameHUD/TopBar
+@onready var top_bar_border: ColorRect = $HUD/GameHUD/TopBar/TopBarBorder
+@onready var theme_icon: TextureRect = $HUD/GameHUD/ThemeIcon
 @onready var label_level: Label = $HUD/GameHUD/LabelLevel
 @onready var label_score: Label = $HUD/GameHUD/LabelScore
 @onready var label_stars: Label = $HUD/GameHUD/LabelStars
@@ -72,6 +75,7 @@ func _load_level(idx: int) -> void:
 	level_container.build_level(current_level_idx)
 	if background:
 		background.theme = level_container.level_theme
+	_apply_level_ui_theme(level_container.level_theme)
 
 	current_state = State.PLAYING
 	menu_screen.visible = false
@@ -134,10 +138,13 @@ func _on_hoop_scored(is_swish: bool) -> void:
 	ball.deactivate()
 	label_victory_score.text = "Final Score: %d PTS\nCoins Banked: %d 🪙" % [score, total_coins]
 	if current_level_idx >= Level.LEVELS_DATA.size() - 1:
-		label_victory_title.text = "TOURNAMENT CHAMPION!"
+		label_victory_title.text = "CYBER TOURNAMENT CHAMPION!"
 		btn_next_level.text = "MAIN MENU"
+	elif current_level_idx == 1:
+		label_victory_title.text = "ORBITAL SPACE JAM COMPLETE!"
+		btn_next_level.text = "NEXT LEVEL"
 	else:
-		label_victory_title.text = "CHAMPIONSHIP SWISH!"
+		label_victory_title.text = "STREET COURT CHAMPION!"
 		btn_next_level.text = "NEXT LEVEL"
 	victory_screen.visible = true
 
@@ -165,14 +172,75 @@ func _on_ball_popped(_reason: String) -> void:
 func add_screen_shake(amt: float) -> void:
 	screen_shake = maxf(screen_shake, amt)
 
+func _apply_level_ui_theme(theme_name: String) -> void:
+	if not top_bar:
+		return
+	match theme_name:
+		"space":
+			top_bar.color = Color(0.02, 0.04, 0.16, 0.92) # Deep cosmic void
+			if top_bar_border:
+				top_bar_border.color = Color(0.15, 0.85, 1.0, 1.0) # Pulsar cyan border
+			label_level.add_theme_color_override("font_color", Color(0.35, 0.95, 1.0, 1.0))
+			label_score.add_theme_color_override("font_color", Color(0.85, 0.95, 1.0, 1.0))
+			label_stars.add_theme_color_override("font_color", Color(1.0, 0.95, 0.45, 1.0))
+			label_attempts.add_theme_color_override("font_color", Color(0.35, 0.85, 1.0, 1.0))
+			if theme_icon:
+				var path = "res://assets/sprites/space/prop-planet-small.png"
+				if ResourceLoader.exists(path):
+					theme_icon.texture = load(path)
+					theme_icon.visible = true
+				else:
+					theme_icon.visible = false
+
+		"arena":
+			top_bar.color = Color(0.12, 0.03, 0.15, 0.92) # Cyber obsidian dark
+			if top_bar_border:
+				top_bar_border.color = Color(1.0, 0.15, 0.6, 1.0) # Laser magenta border
+			label_level.add_theme_color_override("font_color", Color(1.0, 0.35, 0.75, 1.0))
+			label_score.add_theme_color_override("font_color", Color(1.0, 0.92, 0.25, 1.0))
+			label_stars.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2, 1.0))
+			label_attempts.add_theme_color_override("font_color", Color(1.0, 0.4, 0.7, 1.0))
+			if theme_icon:
+				theme_icon.visible = false
+
+		_: # "street" / default
+			top_bar.color = Color(0.06, 0.08, 0.12, 0.88) # Street asphalt
+			if top_bar_border:
+				top_bar_border.color = Color(1.0, 0.6, 0.15, 1.0) # Warm street amber border
+			label_level.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3, 1.0))
+			label_score.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2, 1.0))
+			label_stars.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2, 1.0))
+			label_attempts.add_theme_color_override("font_color", Color(1.0, 0.45, 0.45, 1.0))
+			if theme_icon:
+				theme_icon.visible = false
+
 func _update_hud() -> void:
-	label_level.text = level_container.level_name
-	label_score.text = "SCORE: %05d" % score
-	label_stars.text = "🪙 COINS: %d / %d" % [stars_collected, level_container.total_stars]
-	var balls_str = ""
-	for i in range(attempts):
-		balls_str += "🏀 "
-	label_attempts.text = "BALLS: %s" % balls_str.strip_edges()
+	var th = level_container.level_theme if level_container else "street"
+	match th:
+		"space":
+			label_level.text = "✦ %s ✦" % level_container.level_name
+			label_score.text = "STAR PTS: %05d" % score
+			label_stars.text = "⭐ STARDUST: %d / %d" % [stars_collected, level_container.total_stars]
+			var balls_str = ""
+			for i in range(attempts):
+				balls_str += "● "
+			label_attempts.text = "PROBES: %s" % balls_str.strip_edges()
+		"arena":
+			label_level.text = "⚡ %s ⚡" % level_container.level_name
+			label_score.text = "ARENA PTS: %05d" % score
+			label_stars.text = "🏆 TROPHIES: %d / %d" % [stars_collected, level_container.total_stars]
+			var balls_str = ""
+			for i in range(attempts):
+				balls_str += "▲ "
+			label_attempts.text = "CHARGES: %s" % balls_str.strip_edges()
+		_:
+			label_level.text = "★ %s" % level_container.level_name
+			label_score.text = "SCORE: %05d" % score
+			label_stars.text = "🪙 COINS: %d / %d" % [stars_collected, level_container.total_stars]
+			var balls_str = ""
+			for i in range(attempts):
+				balls_str += "● "
+			label_attempts.text = "BALLS: %s" % balls_str.strip_edges()
 
 # --- Ball Shop / Claim System with Real Ball Icons ---
 func _update_skin_buttons() -> void:

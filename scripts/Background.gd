@@ -24,7 +24,7 @@ func _load_theme_layers() -> void:
 	layers.clear()
 	
 	if theme == "space":
-		watermark_text = "✦ ORBITAL ARENA // SPACE FINALS ✦"
+		watermark_text = "✦ COSMIC SPACE // ZERO GRAVITY JAM ✦"
 		var space_files = [
 			"parallax-space-backgound.png",
 			"parallax-space-stars.png",
@@ -34,6 +34,14 @@ func _load_theme_layers() -> void:
 		]
 		for fname in space_files:
 			var path = "res://assets/backgrounds/space/" + fname
+			if ResourceLoader.exists(path):
+				var tex = load(path) as Texture2D
+				if tex:
+					layers.append(tex)
+	elif theme == "arena":
+		watermark_text = "⚡ CYBER ARENA // FINALS CLUTCH ⚡"
+		for i in range(1, 8):
+			var path = "res://assets/backgrounds/city7/%d.png" % i
 			if ResourceLoader.exists(path):
 				var tex = load(path) as Texture2D
 				if tex:
@@ -112,20 +120,22 @@ func _draw() -> void:
 		var text_color: Color
 		match theme:
 			"space":
-				text_color = Color(0.4, 0.8, 1.0, 0.45) # Soft cyber cyan
+				text_color = Color(0.35, 0.9, 1.0, 0.55) # Glowing nebula cyan
+			"arena":
+				text_color = Color(1.0, 0.25, 0.65, 0.55) # Cyber neon pink
 			"rooftop":
-				text_color = Color(1.0, 0.85, 0.3, 0.45) # Warm sunset amber
+				text_color = Color(1.0, 0.85, 0.3, 0.5) # Warm sunset amber
 			_:
-				text_color = Color(1.0, 0.5, 0.2, 0.45) # Street court orange
+				text_color = Color(1.0, 0.55, 0.2, 0.5) # Street court orange
 
 		# Draw subtle clean stage banner at the top sky
 		draw_string(
 			font,
-			Vector2(W * 0.5 - 180.0, 48.0),
+			Vector2(W * 0.5 - 220.0, 48.0),
 			watermark_text,
 			HORIZONTAL_ALIGNMENT_CENTER,
-			360.0,
-			18,
+			440.0,
+			22,
 			text_color
 		)
 
@@ -133,7 +143,9 @@ func _draw() -> void:
 	var glow_c: Color
 	match theme:
 		"space":
-			glow_c = Color(0.1, 0.4, 0.9, 0.06)
+			glow_c = Color(0.05, 0.3, 0.85, 0.08)
+		"arena":
+			glow_c = Color(0.9, 0.1, 0.55, 0.08)
 		"rooftop":
 			glow_c = Color(0.8, 0.3, 0.6, 0.07)
 		_:
