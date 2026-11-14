@@ -136,15 +136,15 @@ func _on_hoop_scored(is_swish: bool) -> void:
 		return
 	current_state = State.VICTORY
 	ball.deactivate()
-	label_victory_score.text = "Final Score: %d PTS\nCoins Banked: %d 🪙" % [score, total_coins]
+	label_victory_score.text = "Final Score: %d PTS\nCoins Banked: %d" % [score, total_coins]
 	if current_level_idx >= Level.LEVELS_DATA.size() - 1:
-		label_victory_title.text = "CYBER TOURNAMENT CHAMPION!"
+		label_victory_title.text = "BASKET BOUNCE CHAMPION!"
 		btn_next_level.text = "MAIN MENU"
 	elif current_level_idx == 1:
-		label_victory_title.text = "ORBITAL SPACE JAM COMPLETE!"
+		label_victory_title.text = "SPACE JAM CLEARED!"
 		btn_next_level.text = "NEXT LEVEL"
 	else:
-		label_victory_title.text = "STREET COURT CHAMPION!"
+		label_victory_title.text = "STREET COURT CLEARED!"
 		btn_next_level.text = "NEXT LEVEL"
 	victory_screen.visible = true
 
@@ -218,25 +218,25 @@ func _update_hud() -> void:
 	var th = level_container.level_theme if level_container else "street"
 	match th:
 		"space":
-			label_level.text = "✦ %s ✦" % level_container.level_name
-			label_score.text = "STAR PTS: %05d" % score
-			label_stars.text = "⭐ STARDUST: %d / %d" % [stars_collected, level_container.total_stars]
+			label_level.text = "LVL 2: SPACE JAM"
+			label_score.text = "PTS %05d" % score
+			label_stars.text = "STARDUST: %d/%d" % [stars_collected, level_container.total_stars]
 			var balls_str = ""
 			for i in range(attempts):
 				balls_str += "● "
 			label_attempts.text = "PROBES: %s" % balls_str.strip_edges()
 		"arena":
-			label_level.text = "⚡ %s ⚡" % level_container.level_name
-			label_score.text = "ARENA PTS: %05d" % score
-			label_stars.text = "🏆 TROPHIES: %d / %d" % [stars_collected, level_container.total_stars]
+			label_level.text = "LVL 3: CYBER ARENA"
+			label_score.text = "PTS %05d" % score
+			label_stars.text = "TROPHIES: %d/%d" % [stars_collected, level_container.total_stars]
 			var balls_str = ""
 			for i in range(attempts):
 				balls_str += "▲ "
 			label_attempts.text = "CHARGES: %s" % balls_str.strip_edges()
 		_:
-			label_level.text = "★ %s" % level_container.level_name
-			label_score.text = "SCORE: %05d" % score
-			label_stars.text = "🪙 COINS: %d / %d" % [stars_collected, level_container.total_stars]
+			label_level.text = "LVL 1: STREET COURT"
+			label_score.text = "PTS %05d" % score
+			label_stars.text = "COINS: %d/%d" % [stars_collected, level_container.total_stars]
 			var balls_str = ""
 			for i in range(attempts):
 				balls_str += "● "

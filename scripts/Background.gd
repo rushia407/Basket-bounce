@@ -8,7 +8,7 @@ extends Node2D
 
 var layers: Array[Texture2D] = []
 var font: Font = null
-var watermark_text: String = "★ STREET COURT // BOUNCE BACK ★"
+const GAME_TITLE: String = "BASKET BOUNCE"
 
 func _ready() -> void:
 	z_index = -100
@@ -24,7 +24,6 @@ func _load_theme_layers() -> void:
 	layers.clear()
 	
 	if theme == "space":
-		watermark_text = "✦ COSMIC SPACE // ZERO GRAVITY JAM ✦"
 		var space_files = [
 			"parallax-space-backgound.png",
 			"parallax-space-stars.png",
@@ -39,7 +38,6 @@ func _load_theme_layers() -> void:
 				if tex:
 					layers.append(tex)
 	elif theme == "arena":
-		watermark_text = "⚡ CYBER ARENA // FINALS CLUTCH ⚡"
 		for i in range(1, 8):
 			var path = "res://assets/backgrounds/city7/%d.png" % i
 			if ResourceLoader.exists(path):
@@ -47,7 +45,6 @@ func _load_theme_layers() -> void:
 				if tex:
 					layers.append(tex)
 	elif theme == "rooftop":
-		watermark_text = "▲ ROOFTOP JAM // HIGH ALTITUDE ▲"
 		for i in range(1, 8):
 			var path = "res://assets/backgrounds/city5/%d.png" % i
 			if ResourceLoader.exists(path):
@@ -55,7 +52,6 @@ func _load_theme_layers() -> void:
 				if tex:
 					layers.append(tex)
 	else: # street court
-		watermark_text = "★ STREET COURT // BOUNCE BACK ★"
 		for i in range(1, 8):
 			var path = "res://assets/backgrounds/city1/%d.png" % i
 			if ResourceLoader.exists(path):
@@ -115,27 +111,26 @@ func _draw() -> void:
 		draw_rect(Rect2(0, 0, W, H * 0.5), c1)
 		draw_rect(Rect2(0, H * 0.5, W, H * 0.5), c2)
 
-	# 2. Clean Background Text using ByteBounce font (No extra overlapping boxes!)
+	# 2. Subtle Game Title in 2D Background (safely placed at y=115, completely away from TopBar UI at y=8..38)
 	if font:
 		var text_color: Color
 		match theme:
 			"space":
-				text_color = Color(0.35, 0.9, 1.0, 0.55) # Glowing nebula cyan
+				text_color = Color(0.35, 0.9, 1.0, 0.20) # Subtle nebula cyan
 			"arena":
-				text_color = Color(1.0, 0.25, 0.65, 0.55) # Cyber neon pink
+				text_color = Color(1.0, 0.25, 0.65, 0.20) # Subtle cyber pink
 			"rooftop":
-				text_color = Color(1.0, 0.85, 0.3, 0.5) # Warm sunset amber
+				text_color = Color(1.0, 0.85, 0.3, 0.20) # Subtle sunset amber
 			_:
-				text_color = Color(1.0, 0.55, 0.2, 0.5) # Street court orange
+				text_color = Color(1.0, 0.55, 0.2, 0.20) # Subtle court orange
 
-		# Draw subtle clean stage banner at the top sky
 		draw_string(
 			font,
-			Vector2(W * 0.5 - 220.0, 48.0),
-			watermark_text,
+			Vector2(W * 0.5 - 200.0, 115.0),
+			GAME_TITLE,
 			HORIZONTAL_ALIGNMENT_CENTER,
-			440.0,
-			22,
+			400.0,
+			28,
 			text_color
 		)
 
