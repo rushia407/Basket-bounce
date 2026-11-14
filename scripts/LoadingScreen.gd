@@ -194,12 +194,10 @@ func _draw() -> void:
 	# 5. Animated Wave Title ("LOADING" or "READY")
 	var title = "READY TO PLAY" if is_ready else "BASKET BOUNCE"
 	var sub_step = "READY TO PLAY"
-	if progress < 0.34:
+	if progress < 0.5:
 		sub_step = "LOADING SCENES"
-	elif progress < 0.67:
-		sub_step = "LOADING BACKGROUNDS"
 	elif progress < 1.0:
-		sub_step = "LOADING PLAYERS"
+		sub_step = "LOADING BACKGROUNDS"
 	
 	if font:
 		# Main waving Title
