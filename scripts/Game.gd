@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 
 enum State { MENU, PLAYING, VICTORY, GAMEOVER }
 
@@ -37,7 +37,7 @@ var screen_shake: float = 0.0
 @onready var btn_next_level: Button = $HUD/VictoryScreen/Panel/BtnNextLevel
 @onready var label_game_over_score: Label = $HUD/GameOverScreen/Panel/LabelScore
 
-# Skin Buttons
+# Skin Buttons Container
 @onready var skin_container: HBoxContainer = $HUD/MenuScreen/Panel/SkinContainer
 
 func _ready() -> void:
@@ -132,7 +132,7 @@ func _on_hoop_scored(is_swish: bool) -> void:
 		return
 	current_state = State.VICTORY
 	ball.deactivate()
-	label_victory_score.text = "Final Score: %d PTS\nCoins Banked: %d" % [score, total_coins]
+	label_victory_score.text = "Final Score: %d PTS\nCoins Banked: %d 🪙" % [score, total_coins]
 	if current_level_idx >= Level.LEVELS_DATA.size() - 1:
 		label_victory_title.text = "TOURNAMENT CHAMPION!"
 		btn_next_level.text = "MAIN MENU"
@@ -159,7 +159,7 @@ func _on_ball_popped(_reason: String) -> void:
 	else:
 		current_state = State.GAMEOVER
 		ball.deactivate()
-		label_game_over_score.text = "Final Score: %d PTS\nTotal Coins: %d" % [score, total_coins]
+		label_game_over_score.text = "Final Score: %d PTS\nTotal Coins: %d 🪙" % [score, total_coins]
 		game_over_screen.visible = true
 
 func add_screen_shake(amt: float) -> void:
@@ -168,13 +168,23 @@ func add_screen_shake(amt: float) -> void:
 func _update_hud() -> void:
 	label_level.text = level_container.level_name
 	label_score.text = "SCORE: %05d" % score
-	label_stars.text = "COINS: %d / %d" % [stars_collected, level_container.total_stars]
-	label_attempts.text = "BALLS: %d" % attempts
+	label_stars.text = "🪙 COINS: %d / %d" % [stars_collected, level_container.total_stars]
+	var balls_str = ""
+	for i in range(attempts):
+		balls_str += "🏀 "
+	label_attempts.text = "BALLS: %s" % balls_str.strip_edges()
 
-# --- Ball Shop / Claim System with Coins ---
+# --- Ball Shop / Claim System with Real Ball Icons ---
 func _update_skin_buttons() -> void:
 	if not skin_container:
 		return
+
+	var balls_tex: Texture2D = null
+	if ResourceLoader.exists("res://assets/sprites/balls.png"):
+		balls_tex = load("res://assets/sprites/balls.png")
+	elif ResourceLoader.exists("res://Pixel Ball Assets/Pixel Ball Assets/balls.png"):
+		balls_tex = load("res://Pixel Ball Assets/Pixel Ball Assets/balls.png")
+
 	var buttons = skin_container.get_children()
 	for i in range(buttons.size()):
 		var btn = buttons[i] as Button
@@ -188,24 +198,34 @@ func _update_skin_buttons() -> void:
 		var cost = skin_data["cost"]
 		var s_name = skin_data["name"]
 
+		# Attach ball sprite picture from balls.png
+		if balls_tex and not btn.icon:
+			var atlas = AtlasTexture.new()
+			atlas.atlas = balls_tex
+			atlas.region = skin_data["rect"]
+			btn.icon = atlas
+			btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+			btn.expand_icon = false
+
 		if skin_id in unlocked_skins:
 			if ball.selected_skin == skin_id:
 				btn.text = "%s\n[EQUIPPED]" % s_name
-				btn.modulate = Color(1.0, 0.85, 0.2)
+				btn.modulate = Color(1.0, 0.9, 0.25)
 			else:
 				btn.text = "%s\n[SELECT]" % s_name
-				btn.modulate = Color(0.9, 0.9, 0.9)
+				btn.modulate = Color(0.9, 0.92, 1.0)
 		else:
-			btn.text = "%s\n[CLAIM: %d 🪙]" % [s_name, cost]
+			btn.text = "%s\n[CLAIM %d🪙]" % [s_name, cost]
 			if total_coins >= cost:
-				btn.modulate = Color(0.4, 1.0, 0.5) # Can afford
+				btn.modulate = Color(0.4, 1.0, 0.55) # Can afford
 			else:
-				btn.modulate = Color(0.6, 0.6, 0.6) # Can't afford
+				btn.modulate = Color(0.65, 0.65, 0.7) # Can't afford
 
 	# Update subtitle with banked coins info
 	var sub = $HUD/MenuScreen/Panel/Subtitle as Label
 	if sub:
-		sub.text = "BANKED COINS: %d 🪙 | CLAIM & UNLOCK BALLS BELOW!" % total_coins
+		sub.text = "🪙 COIN BANK: %d  |  CLAIM & SELECT YOUR BALL" % total_coins
 
 func _on_skin_selected(skin_idx: int) -> void:
 	if skin_idx >= Ball.SKINS.size():

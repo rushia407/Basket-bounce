@@ -44,6 +44,9 @@ func _ready() -> void:
 	# Disabled by default so it doesn't fall or lose before game starts
 	set_physics_process(false)
 	visible = false
+	safe_margin = 0.12
+	floor_snap_length = 8.0
+	floor_constant_speed = true
 	apply_skin(selected_skin)
 
 func activate(spawn_pos: Vector2) -> void:

@@ -1,9 +1,9 @@
-﻿[gd_scene load_steps=8 format=3 uid="uid://main7basket01"]
+[gd_scene load_steps=8 format=3 uid="uid://main7basket01"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_game"]
 [ext_resource type="Script" path="res://scripts/Level.gd" id="2_level"]
 [ext_resource type="PackedScene" path="res://scenes/Ball.tscn" id="3_ball"]
-[ext_resource type="FontFile" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="5_font"]
+[ext_resource type="FontFile" path="res://assets/fonts/ByteBounce.ttf" id="5_font"]
 [ext_resource type="Script" path="res://scripts/Background.gd" id="6_bg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
@@ -47,14 +47,25 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="TopBar" type="ColorRect" parent="HUD/GameHUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = 38.0
+grow_horizontal = 2
+color = Color(0.05, 0.07, 0.12, 0.85)
+
 [node name="LabelLevel" type="Label" parent="HUD/GameHUD"]
 layout_mode = 0
-offset_left = 16.0
-offset_top = 14.0
+offset_left = 24.0
+offset_top = 13.0
 offset_right = 320.0
-offset_bottom = 34.0
+offset_bottom = 35.0
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 18
 text = "Level 1: Street Court Warmup"
 
 [node name="LabelScore" type="Label" parent="HUD/GameHUD"]
@@ -63,13 +74,13 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -120.0
-offset_top = 14.0
+offset_top = 13.0
 offset_right = 120.0
-offset_bottom = 34.0
+offset_bottom = 35.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 text = "SCORE: 00000"
 horizontal_alignment = 1
 
@@ -79,13 +90,13 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -280.0
-offset_top = 14.0
-offset_right = -130.0
-offset_bottom = 34.0
+offset_top = 13.0
+offset_right = -150.0
+offset_bottom = 35.0
 grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 0.75, 0.2, 1)
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 18
 text = "COINS: 0 / 3"
 
 [node name="LabelAttempts" type="Label" parent="HUD/GameHUD"]
@@ -93,14 +104,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -110.0
-offset_top = 14.0
-offset_right = -16.0
-offset_bottom = 34.0
+offset_left = -140.0
+offset_top = 13.0
+offset_right = -24.0
+offset_bottom = 35.0
 grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 18
 text = "BALLS: 3"
 
 [node name="MenuScreen" type="Control" parent="HUD"]
@@ -127,10 +138,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -310.0
-offset_top = -180.0
-offset_right = 310.0
-offset_bottom = 180.0
+offset_left = -340.0
+offset_top = -190.0
+offset_right = 340.0
+offset_bottom = 190.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -140,14 +151,14 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -260.0
-offset_top = 22.0
-offset_right = 260.0
+offset_left = -280.0
+offset_top = 18.0
+offset_right = 280.0
 offset_bottom = 54.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.65, 0.2, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 28
 text = "BASKETBALL BOUNCEBACK"
 horizontal_alignment = 1
 
@@ -156,15 +167,15 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -240.0
+offset_left = -280.0
 offset_top = 58.0
-offset_right = 240.0
-offset_bottom = 78.0
+offset_right = 280.0
+offset_bottom = 82.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.7, 0.75, 0.85, 1)
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 8
-text = "Rhythmic Bounce Jam & Buzzer Beater Climax!"
+theme_override_font_sizes/font_size = 18
+text = "🪙 COIN BANK: 0  |  CLAIM & SELECT YOUR BALL"
 horizontal_alignment = 1
 
 [node name="Instructions" type="Label" parent="HUD/MenuScreen/Panel"]
@@ -174,20 +185,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -80.0
-offset_right = 240.0
-offset_bottom = 30.0
+offset_left = -280.0
+offset_top = -95.0
+offset_right = 280.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.85, 0.88, 0.95, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 16
 text = "A / D or Arrows : Move Left / Right
 Space / W / Up   : High Boost Jump
 S / Down (in air): Slam Shockwave!
 Stomp Slimes from above for +200 PTS
-Sink Buzzer Beater Final Shot to Win!"
+Sink Buzzer Beater Top-Down Shot to Win!"
 horizontal_alignment = 1
 
 [node name="SkinContainer" type="HBoxContainer" parent="HUD/MenuScreen/Panel"]
@@ -197,49 +208,55 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = 40.0
-offset_right = 300.0
-offset_bottom = 80.0
+offset_left = -330.0
+offset_top = 22.0
+offset_right = 330.0
+offset_bottom = 112.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="BtnSkin0" type="Button" parent="HUD/MenuScreen/Panel/SkinContainer"]
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 14
 text = "Basketball"
 
 [node name="BtnSkin1" type="Button" parent="HUD/MenuScreen/Panel/SkinContainer"]
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 14
 text = "Volt"
 
 [node name="BtnSkin2" type="Button" parent="HUD/MenuScreen/Panel/SkinContainer"]
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 14
 text = "Football"
 
 [node name="BtnSkin3" type="Button" parent="HUD/MenuScreen/Panel/SkinContainer"]
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 14
 text = "8-Ball"
 
 [node name="BtnSkin4" type="Button" parent="HUD/MenuScreen/Panel/SkinContainer"]
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 14
 text = "Beach"
 
 [node name="BtnSkin5" type="Button" parent="HUD/MenuScreen/Panel/SkinContainer"]
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 14
 text = "Baseball"
 
 [node name="BtnPlay" type="Button" parent="HUD/MenuScreen/Panel"]
@@ -249,14 +266,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -110.0
+offset_left = -120.0
 offset_top = -65.0
-offset_right = 110.0
-offset_bottom = -20.0
+offset_right = 120.0
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 text = "PLAY GAME"
 
@@ -299,13 +316,13 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
-offset_top = 28.0
+offset_top = 24.0
 offset_right = 200.0
 offset_bottom = 60.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.2, 0.95, 0.5, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 24
 text = "CHAMPIONSHIP SWISH!"
 horizontal_alignment = 1
 
@@ -319,12 +336,12 @@ anchor_bottom = 0.5
 offset_left = -180.0
 offset_top = -25.0
 offset_right = 180.0
-offset_bottom = 10.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 text = "Final Score: 0 PTS"
 horizontal_alignment = 1
 
@@ -342,7 +359,7 @@ offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 text = "NEXT LEVEL"
 
@@ -385,13 +402,13 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -180.0
-offset_top = 28.0
+offset_top = 24.0
 offset_right = 180.0
 offset_bottom = 60.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 26
 text = "GAME OVER"
 horizontal_alignment = 1
 
@@ -402,14 +419,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
+offset_left = -180.0
 offset_top = -25.0
-offset_right = 150.0
-offset_bottom = 10.0
+offset_right = 180.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 18
 text = "Final Score: 0 PTS"
 horizontal_alignment = 1
 
@@ -427,7 +444,7 @@ offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("5_font")
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 text = "RETRY"
 

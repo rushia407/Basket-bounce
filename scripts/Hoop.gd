@@ -19,6 +19,9 @@ var net_constraints: Array[Dictionary] = []
 var scored: bool = false
 var is_swish: bool = true
 
+# Two-stage goal detection: prevents scoring from underneath!
+var was_above_rim: bool = false
+
 # Confetti particles
 var confetti_list: Array[Dictionary] = []
 
@@ -71,19 +74,39 @@ func _init_net() -> void:
 				net_constraints.append({"p1": idx, "p2": down_idx, "len": d})
 
 func _physics_process(delta: float) -> void:
+	_track_ball_trajectory()
 	_update_net(delta)
 	_update_confetti(delta)
 	queue_redraw()
 
-func _update_net(_delta: float) -> void:
-	# Find ball in tree to interact with net
-	var ball: Ball = null
+func _track_ball_trajectory() -> void:
+	if scored:
+		return
+	var ball = _get_ball()
+	if not ball or not ball.is_alive:
+		was_above_rim = false
+		return
+
+	var ball_local = to_local(ball.global_position)
+
+	# Ball is considered "above rim" ONLY when it's clearly higher than the rim plane
+	# and horizontally near the basket opening
+	if ball_local.y < rim_y - 6.0 and ball_local.x >= rim_left_x - 18.0 and ball_local.x <= rim_right_x + 18.0:
+		was_above_rim = true
+	# If the ball dropped down below or bounced far away without scoring, reset the flag
+	elif ball_local.y > rim_y + 70.0 or absf(ball_local.x) > 130.0:
+		was_above_rim = false
+
+func _get_ball() -> Ball:
 	var tree = get_tree()
 	if tree:
 		var balls = tree.get_nodes_in_group("ball")
 		if balls.size() > 0:
-			ball = balls[0] as Ball
-	
+			return balls[0] as Ball
+	return null
+
+func _update_net(_delta: float) -> void:
+	var ball = _get_ball()
 	var ball_local_pos = to_local(ball.global_position) if ball else Vector2(-9999, -9999)
 
 	# Verlet integration
@@ -126,13 +149,28 @@ func _on_goal_area_entered(body: Node2D) -> void:
 	if scored:
 		return
 	var ball = body as Ball
-	if ball and ball.is_alive and ball.velocity.y > 0:
-		scored = true
-		SoundManager.play("swish", 1.2)
-		SoundManager.play("cheer", 1.4)
-		SoundManager.play("buzzer", 1.5)
-		_spawn_confetti()
-		goal_scored.emit(is_swish)
+	if not ball or not ball.is_alive:
+		return
+
+	# STRICT BASKETBALL GOAL RULES:
+	# 1. Ball MUST have been detected above the rim before entry!
+	# 2. Ball MUST be traveling downward (velocity.y > 60.0)!
+	if not was_above_rim or ball.velocity.y <= 60.0:
+		# Ball hit the bottom of the net or grazed from underneath!
+		# Gently rebound it downward and play rim/net contact sound
+		if ball.velocity.y < 0.0:
+			ball.velocity.y = -ball.velocity.y * 0.35 # Rebound down
+		SoundManager.play("rim", 0.8)
+		return
+
+	# Legitimate basket scored from above!
+	scored = true
+	was_above_rim = false
+	SoundManager.play("swish", 1.4)
+	SoundManager.play("cheer", 1.4)
+	SoundManager.play("buzzer", 1.5)
+	_spawn_confetti()
+	goal_scored.emit(is_swish)
 
 func _spawn_confetti() -> void:
 	var colors = [

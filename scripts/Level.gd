@@ -29,7 +29,7 @@ var level_name: String = ""
 var level_theme: String = "street"
 
 const LEVELS_DATA = [
-	# LEVEL 1: Street Court Warmup
+	# LEVEL 1: Street Court Warmup (City 1 Background)
 	{
 		"name": "Level 1: Street Court Warmup",
 		"theme": "street",
@@ -49,7 +49,7 @@ const LEVELS_DATA = [
 			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
 		]
 	},
-	# LEVEL 2: Rooftop Jam
+	# LEVEL 2: Rooftop Jam (City 5 Sunset/Twilight)
 	{
 		"name": "Level 2: Rooftop Jam",
 		"theme": "rooftop",
@@ -73,38 +73,42 @@ const LEVELS_DATA = [
 			{"x": 27 * 36, "y": 9 * 36, "rangeX": 0.0, "rangeY": 40.0, "speed": 1.5, "width": 2}
 		]
 	},
-	# LEVEL 3: Championship Arena
+	# LEVEL 3: Orbital Space Finals (Space Nebula & Planets Background!)
 	{
-		"name": "Level 3: Championship Arena",
-		"theme": "arena",
+		"name": "Level 3: Orbital Space Jam",
+		"theme": "space",
 		"map": [
 			[6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,12,0,0,0,0,0,0,8,0,0,0,0,12,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,0,0,0,0,0,0,0,0,0,0,4,4,4,0,0,0,0,0,0,0,3,3,3,0,0,0,0,0,0,0,0,16,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,0,0,0,0,0,0,0,0,0,0,0,3,3,3,0,0,0,0,0,0,0,3,3,3,0,0,0,0,0,0,0,0,16,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,18,0,0,5,0,0,10,0,0,7,0,0,0,0,0,0,0,9,0,5,5,5,0,0,7,0,0,10,0,0,0,0,11,0,5,5,0,0,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-			[2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+			[0,18,0,0,5,0,0,10,0,0,7,0,0,0,0,0,0,0,0,9,0,0,0,5,5,0,0,0,0,0,10,0,0,0,0,7,0,0,0,0,10,0,0,5,0,0,15,0,0,0,0,0,0,0,0,0],
+			[1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[2,2,2,2,2,0,0,0,2,2,2,2,0,0,0,2,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
 		],
 		"movingPlatforms": [
-			{"x": 12 * 36, "y": 10 * 36, "rangeX": 35.0, "rangeY": 0.0, "speed": 1.4, "width": 2},
-			{"x": 27 * 36, "y": 9 * 36, "rangeX": 0.0, "rangeY": 45.0, "speed": 1.6, "width": 2}
+			{"x": 5 * 36, "y": 10 * 36, "rangeX": 0.0, "rangeY": 35.0, "speed": 1.4, "width": 2},
+			{"x": 12 * 36, "y": 9 * 36, "rangeX": 35.0, "rangeY": 0.0, "speed": 1.6, "width": 2},
+			{"x": 22 * 36, "y": 10 * 36, "rangeX": 0.0, "rangeY": 40.0, "speed": 1.8, "width": 2},
+			{"x": 32 * 36, "y": 9 * 36, "rangeX": 30.0, "rangeY": 20.0, "speed": 1.5, "width": 2}
 		]
 	}
 ]
 
-func build_level(index: int) -> void:
-	for child in get_children():
-		child.queue_free()
+func build_level(idx: int) -> void:
+	for c in get_children():
+		c.queue_free()
 
 	total_stars = 0
-	var data = LEVELS_DATA[index % LEVELS_DATA.size()]
+	hoop_node = null
+
+	var data = LEVELS_DATA[clampi(idx, 0, LEVELS_DATA.size() - 1)]
 	level_name = data["name"]
 	level_theme = data["theme"]
 	var grid = data["map"]
@@ -116,46 +120,57 @@ func build_level(index: int) -> void:
 	terrain_body.collision_layer = 1
 	add_child(terrain_body)
 
+	# --- FIX TILE GLITCHING: MERGE CONTIGUOUS SOLID TILES HORIZONTALLY ---
+	# Eliminates internal vertical seams between adjacent tiles so ball never snags or tunnels!
+	for r in range(rows):
+		var c = 0
+		while c < cols:
+			if grid[r][c] in [1, 2, 3]:
+				var start_c = c
+				while c < cols and grid[r][c] in [1, 2, 3]:
+					c += 1
+				var run_len = c - start_c
+				var merged_shape = CollisionShape2D.new()
+				var rect = RectangleShape2D.new()
+				rect.size = Vector2(run_len * TILE_SIZE, TILE_SIZE)
+				merged_shape.shape = rect
+				var center_x = start_c * TILE_SIZE + (run_len * TILE_SIZE) / 2.0
+				var center_y = r * TILE_SIZE + TILE_SIZE / 2.0
+				merged_shape.position = Vector2(center_x, center_y)
+				terrain_body.add_child(merged_shape)
+			else:
+				c += 1
+
+	# --- INSTANTIATE TILE SPRITES & LEVEL ENTITIES ---
 	for r in range(rows):
 		for c in range(cols):
 			var val = grid[r][c]
 			var world_x = c * TILE_SIZE + TILE_SIZE / 2.0
 			var world_y = r * TILE_SIZE + TILE_SIZE / 2.0
 
-			# --- SOLID TILES (using world_tileset.png from first-game) ---
 			if val == 1 or val == 2 or val == 3:
-				var block_shape = CollisionShape2D.new()
-				var rect_shape = RectangleShape2D.new()
-				rect_shape.size = Vector2(TILE_SIZE, TILE_SIZE)
-				block_shape.shape = rect_shape
-				block_shape.position = Vector2(world_x, world_y)
-				terrain_body.add_child(block_shape)
-
-				# Draw tile sprite using world_tileset.png (16x16 source, scaled up)
 				var spr = Sprite2D.new()
 				spr.texture = tile_texture
 				spr.region_enabled = true
 				spr.scale = Vector2(TS_SCALE, TS_SCALE)
-				# world_tileset.png layout: row 0 = grass top; row 1 = dirt; row 2 = stone/brick
-				# Left edge col=0, mid col=1, right col=2 for each row
 				match val:
-					1: # Grass top - use middle grass tile (col 1, row 0)
+					1:
 						spr.region_rect = Rect2(1 * TS, 0 * TS, TS, TS)
-					2: # Dirt fill - use dirt (col 1, row 1)
+					2:
 						spr.region_rect = Rect2(1 * TS, 1 * TS, TS, TS)
-					3: # Brick / solid block (col 1, row 2)
+					3:
 						spr.region_rect = Rect2(1 * TS, 2 * TS, TS, TS)
 				spr.position = Vector2(world_x, world_y)
 				add_child(spr)
 
 			elif val == 4:
-				# One-way platform — use platforms.png
+				# One-way platform with proper snap
 				var one_way_body = StaticBody2D.new()
 				one_way_body.collision_layer = 1
 				one_way_body.position = Vector2(world_x, world_y - 6)
 				var shape_node = CollisionShape2D.new()
 				var rect_shape = RectangleShape2D.new()
-				rect_shape.size = Vector2(TILE_SIZE, 10)
+				rect_shape.size = Vector2(TILE_SIZE, 8)
 				shape_node.shape = rect_shape
 				shape_node.one_way_collision = true
 				one_way_body.add_child(shape_node)
@@ -200,7 +215,6 @@ func build_level(index: int) -> void:
 				add_child(def)
 
 			elif val == 10:
-				# Flyer uses purple slime
 				var def = defender_scene.instantiate() as Defender
 				def.defender_type = "flyer"
 				def.position = Vector2(world_x, world_y)
@@ -208,7 +222,6 @@ func build_level(index: int) -> void:
 				add_child(def)
 
 			elif val == 11:
-				# Crawler uses green slime (mirrored)
 				var def = defender_scene.instantiate() as Defender
 				def.defender_type = "crawler"
 				def.position = Vector2(world_x, world_y)
@@ -222,10 +235,6 @@ func build_level(index: int) -> void:
 				fruit.fruit_collected.connect(func(pts): star_picked.emit(pts))
 				add_child(fruit)
 
-			elif val == 15:
-				# Buzzer Beater Zone court marker
-				pass
-
 			elif val == 16:
 				hoop_node = hoop_scene.instantiate() as BasketballHoop
 				hoop_node.position = Vector2(world_x, world_y - 20)
@@ -235,7 +244,7 @@ func build_level(index: int) -> void:
 			elif val == 18:
 				player_start_pos = Vector2(world_x, world_y)
 
-	# Moving platforms (use platforms.png texture)
+	# Moving platforms
 	if data.has("movingPlatforms"):
 		for p in data["movingPlatforms"]:
 			var plat = platform_scene.instantiate() as MovingPlatform
