@@ -42,6 +42,7 @@ var screen_shake: float = 0.0
 
 # Skin Buttons Container
 @onready var skin_container: HBoxContainer = $HUD/MenuScreen/Panel/SkinContainer
+@onready var label_menu_coins: Label = $HUD/MenuScreen/Panel/CoinBadge/LabelMenuCoins
 
 func _ready() -> void:
 	_load_save()
@@ -50,6 +51,16 @@ func _ready() -> void:
 	level_container.star_picked.connect(_on_star_picked)
 	level_container.defender_crushed.connect(_on_defender_crushed)
 	level_container.level_hoop_scored.connect(_on_hoop_scored)
+
+	# Setup menu coin badge icon
+	var coin_icon = $HUD/MenuScreen/Panel/CoinBadge/CoinIcon as TextureRect
+	if coin_icon and ResourceLoader.exists("res://assets/sprites/coin.png"):
+		var c_tex = load("res://assets/sprites/coin.png") as Texture2D
+		if c_tex:
+			var atlas = AtlasTexture.new()
+			atlas.atlas = c_tex
+			atlas.region = Rect2(0, 0, 16, 16)
+			coin_icon.texture = atlas
 
 	# Ball starts completely deactivated during menu
 	ball.deactivate()
@@ -291,10 +302,14 @@ func _update_skin_buttons() -> void:
 				btn.text = "%s\nNEED: %d COINS" % [s_name, cost]
 				btn.modulate = Color(0.7, 0.72, 0.78) # Can't afford yet (muted)
 
-	# Update subtitle with banked coins info
+	# Update top coin badge
+	if label_menu_coins:
+		label_menu_coins.text = "COINS: %d" % total_coins
+
+	# Update subtitle
 	var sub = $HUD/MenuScreen/Panel/Subtitle as Label
 	if sub:
-		sub.text = "COIN BANK: %d COINS  |  CLAIM & SELECT YOUR BALL" % total_coins
+		sub.text = "SELECT OR CLAIM A BALL WITH COINS"
 
 func _on_skin_selected(skin_idx: int) -> void:
 	if skin_idx >= Ball.SKINS.size():
